@@ -1,25 +1,24 @@
 import sys
 
-sys.path.append("../data")
+sys.path.append("../../data")
 sys.path.append("../jobnet")
 import json
 import spacy
+import pandas as pd
 from preprocessing import (
     substitute_letter,
     clean_text,
     remove_html_commands,
-    collect_lemmas,
+    collect_nn_adj,
     rm_stops,
 )
 from polyglot.detect import Detector
 from load import get_files
 
+nlp = spacy.load("da_core_news_lg")
 
 da_stops = open("../../stops/da_stops_lemmas.txt", "r")
 da_stops = da_stops.read().split()
-
-en_stops = open("../../stops/en_stops_lemmas.txt", "r")
-en_stops = en_stops.read().split()
 
 path = "../../data/jobnet-sample/"
 files_paths = get_files(path)
@@ -37,23 +36,25 @@ cleaned_posts = [clean_text(post) for post in cleaned_posts]
 cleaned_posts = [post for post in cleaned_posts if post != ""]
 
 da_posts = []
-en_posts = []
-other = []
 
 for post in cleaned_posts:
     detector = Detector(post)
-    if detector.language.code == "da":
+    if detector.language.code == "da" and detector.language.confidence >= 90:
         da_posts.append(post)
-    elif detector.language.code == "en":
-        en_posts.append(post)
-    else:
-        other.append(post)
 
-nlp = spacy.load("da_core_news_lg")
-da_lemmas = [collect_lemmas(post, nlp) for post in da_posts]
 
-nlp = spacy.load("en_core_web_lg")
-en_lemmas = [collect_lemmas(post, nlp) for post in en_posts]
+tags = ["PROPN", "NOUN", "ADJ"]
 
-da_lemmas = [rm_stops(post, da_stops) for post in da_lemmas]
-en_lemmas = [rm_stops(post, en_stops) for post in en_lemmas]
+nn_adj_lemmas = []
+
+for post in da_posts:
+    lemmas = collect_nn_adj(post, nlp, tags)
+    nn_adj_lemmas.append(lemmas)
+
+no_stops = [rm_stops(post, da_stops) for post in nn_adj_lemmas]
+
+
+df = pd.DataFrame(columns=["cleaned_description", "nn_adj_lemmas"])
+df["cleaned_description"] = da_posts
+df["nn_adj_lemmas"] = no_stops
+df.to_pickle("../../data/pkl/dataset.pkl")
