@@ -1,3 +1,4 @@
+"""Pipeline for preparing a list of Danish stop words"""
 import spacy
 import sys
 

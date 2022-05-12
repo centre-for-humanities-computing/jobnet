@@ -1,3 +1,4 @@
+"""Pipeline for collection and processing job posts"""
 import sys
 
 sys.path.append("../../data")

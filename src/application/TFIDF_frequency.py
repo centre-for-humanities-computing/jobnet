@@ -1,3 +1,4 @@
+"""Pipeline for TF-IDF weighed word frequency count"""
 import sys
 
 sys.path.append("../../data")

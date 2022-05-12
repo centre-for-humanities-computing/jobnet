@@ -1,3 +1,4 @@
+"""Pipeline for unweighed word count"""
 import matplotlib.pyplot as plt
 import seaborn as sns
 from collections import Counter
