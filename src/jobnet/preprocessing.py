@@ -89,7 +89,7 @@ def collect_lemmas(text: str, nlp) -> List[str]:
     Lemmatizes text using spaCy pipeline.
 
     Args:
-        text (str): A string to be lemmatized.
+        text (str): A text to extract lemmas from.
         nlp: A spaCy pipeline.
 
     Returns:
@@ -99,6 +99,7 @@ def collect_lemmas(text: str, nlp) -> List[str]:
     lemmas = []
 
     doc = nlp(text)
+
     for token in doc:
         lemmas.append(token.lemma_)
 
@@ -106,24 +107,26 @@ def collect_lemmas(text: str, nlp) -> List[str]:
 
 
 def collect_nn_adj(text: str, nlp, pos_tags: List[str]) -> List[str]:
-    """Collects lemmas only with a specified POS tag.
+    """
+    Collects lemmas only with a specified POS tag.
 
     Args:
         text (str): A text to extract lemmas from.
         nlp: A spaCy pipeline.
-        pos_tags (_type_): A list with POS tags.
+        pos_tags (List[str]): A list with POS tags.
 
     Returns:
         List[str]: A list with lemmas.
     """
 
+    nn_adj = []
+
     doc = nlp(text)
-    lemmas = []
 
     for token in doc:
         if token.pos_ in pos_tags:
-            lemmas.append(token.lemma_)
-    return lemmas
+            nn_adj.append(token.lemma_)
+    return nn_adj
 
 
 def rm_stops(text: List[str], stopwords: List[str]) -> List[str]:

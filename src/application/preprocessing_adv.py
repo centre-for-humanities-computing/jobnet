@@ -20,41 +20,66 @@ nlp = spacy.load("da_core_news_lg")
 da_stops = open("../../stops/da_stops_lemmas.txt", "r")
 da_stops = da_stops.read().split()
 
-path = "../../data/jobnet-sample/"
-files_paths = get_files(path)
+root_dir = "../../data/jobnet/"
+files_paths = get_files(root_dir)
 
 descriptions = []
+occupation_area = []
+occupation_group = []
+occupation = []
+
 
 for file in files_paths:
     with open(file, encoding="utf-8") as f:
         data = json.load(f)
-        descriptions.append(data["FormattedPurpose"])
+        try:
+            if data["isExternal"] == False:
+                descriptions.append(data["details"]["FormattedPurpose"])
+                occupation_area.append(data["summary"]["OccupationArea"])
+                occupation_group.append(data["summary"]["OccupationGroup"])
+                occupation.append(data["summary"]["Occupation"])
+            else:
+                continue
+        except TypeError:
+            continue
 
 cleaned_posts = [remove_html_commands(post) for post in descriptions]
 cleaned_posts = [substitute_letter(post) for post in cleaned_posts]
 cleaned_posts = [clean_text(post) for post in cleaned_posts]
-cleaned_posts = [post for post in cleaned_posts if post != ""]
 
-da_posts = []
+df = pd.DataFrame(
+    columns=[
+        "occupation_area",
+        "occupation_group",
+        "occupation",
+        "cleaned_description",
+        "da_description",
+        "nn_adj_lemmas",
+    ]
+)
 
-for post in cleaned_posts:
-    detector = Detector(post)
+df["occupation_area"] = occupation_area
+df["occupation_group"] = occupation_group
+df["occupation"] = occupation
+df["cleaned_description"] = cleaned_posts
+
+df = df.loc[df["cleaned_description"] != ""]
+
+for row in range(len(df)):
+    detector = Detector(df["cleaned_description"].iloc[row], quiet=True)
     if detector.language.code == "da" and detector.language.confidence >= 90:
-        da_posts.append(post)
+        df["da_description"].iloc[row] = True
+    else:
+        df["da_description"].iloc[row] = False
 
+df = df.loc[df["da_description"] == True]
+df = df.drop(["da_description"], axis=1)
 
 tags = ["PROPN", "NOUN", "ADJ"]
 
-nn_adj_lemmas = []
-
-for post in da_posts:
-    lemmas = collect_nn_adj(post, nlp, tags)
-    nn_adj_lemmas.append(lemmas)
-
-no_stops = [rm_stops(post, da_stops) for post in nn_adj_lemmas]
-
-
-df = pd.DataFrame(columns=["cleaned_description", "nn_adj_lemmas"])
-df["cleaned_description"] = da_posts
+cleaned_descriptions = df["cleaned_description"].to_list()
+nn_adj = [collect_nn_adj(post, nlp, tags) for post in cleaned_descriptions]
+no_stops = [rm_stops(post, da_stops) for post in nn_adj]
 df["nn_adj_lemmas"] = no_stops
+
 df.to_pickle("../../data/pkl/dataset.pkl")
