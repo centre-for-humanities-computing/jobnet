@@ -1,4 +1,4 @@
-"""Pipeline for collection and processing job posts"""
+"""Pipeline for collection and processing of job posts"""
 import sys
 
 sys.path.append("../../data")
@@ -10,6 +10,8 @@ from preprocessing import (
     substitute_letter,
     clean_text,
     remove_html_commands,
+    collect_tokens,
+    collect_lemmas,
     collect_nn_adj,
     rm_stops,
 )
@@ -55,6 +57,8 @@ df = pd.DataFrame(
         "occupation",
         "cleaned_description",
         "da_description",
+        "tokens",
+        "lemmas",
         "nn_adj_lemmas",
     ]
 )
@@ -79,8 +83,14 @@ df = df.drop(["da_description"], axis=1)
 tags = ["PROPN", "NOUN", "ADJ"]
 
 cleaned_descriptions = df["cleaned_description"].to_list()
+tokens = [collect_tokens(post, nlp) for post in cleaned_descriptions]
+all_lemmas = [collect_lemmas(post, nlp) for post in cleaned_descriptions]
 nn_adj = [collect_nn_adj(post, nlp, tags) for post in cleaned_descriptions]
-no_stops = [rm_stops(post, da_stops) for post in nn_adj]
-df["nn_adj_lemmas"] = no_stops
+no_stops_tokens = [rm_stops(post, da_stops) for post in tokens]
+no_stops_lemmas = [rm_stops(post, da_stops) for post in all_lemmas]
+no_stops_nn_adj = [rm_stops(post, da_stops) for post in nn_adj]
+df["tokens"] = no_stops_tokens
+df["lemmas"] = no_stops_lemmas
+df["nn_adj_lemmas"] = no_stops_nn_adj
 
 df.to_pickle("../../data/pkl/dataset.pkl")

@@ -83,6 +83,26 @@ def clean_text(text: str) -> str:
 
     return cleaned_text
 
+ 
+def collect_tokens(text: str, nlp) -> List[str]:
+    """Collects tokens from a text.
+
+    Args:
+        text (str): A text to tokenize.
+        nlp (_type_): A spaCy pipeline.
+
+    Returns:
+        List[str]: A list with tokens.
+    """
+
+    doc = nlp(text)
+    tokens = []
+
+    for token in doc:
+        tokens.append(token.text)
+    
+    return tokens   
+
 
 def collect_lemmas(text: str, nlp) -> List[str]:
     """

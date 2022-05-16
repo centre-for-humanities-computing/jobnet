@@ -32,4 +32,4 @@ plt.yticks(fontsize=25)
 
 ax.set(xlabel="", ylabel="")
 
-plt.savefig("../../figs/count.pdf")
+plt.savefig("../../figs/unigrams_count.pdf")

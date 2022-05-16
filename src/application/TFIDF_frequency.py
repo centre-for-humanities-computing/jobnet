@@ -21,6 +21,7 @@ tfidf_weights = [
     (word, tfidf_vectors.getcol(idx).sum())
     for word, idx in vectorizer.vocabulary_.items()
 ]
+
 wordcloud = WordCloud(
     width=3000,
     height=2000,
@@ -33,4 +34,4 @@ wordcloud = WordCloud(
 plt.figure(figsize=(40, 30))
 plt.imshow(wordcloud)
 plt.axis("off")
-plt.savefig("../../figs/unigrams_wordcloud.png")
+plt.savefig("../../figs/unigrams_wordcloud.pdf")
