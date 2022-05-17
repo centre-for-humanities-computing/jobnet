@@ -69,6 +69,10 @@ df["occupation"] = occupation
 df["cleaned_description"] = cleaned_posts
 
 df = df.loc[df["cleaned_description"] != ""]
+print(len(df))
+
+df = df.drop_duplicates(subset=['cleaned_description'], keep='first')
+print(len(df))
 
 for row in range(len(df)):
     detector = Detector(df["cleaned_description"].iloc[row], quiet=True)
@@ -93,4 +97,4 @@ df["tokens"] = no_stops_tokens
 df["lemmas"] = no_stops_lemmas
 df["nn_adj_lemmas"] = no_stops_nn_adj
 
-df.to_pickle("../../data/pkl/dataset.pkl")
+df.to_pickle("../../data/pkl/dataset1.pkl")

@@ -41,7 +41,7 @@ G = nx.Graph()
 for key, value in d[0].items():
     G.add_edge(key[0], key[1], weight=(value))
 
-fig, ax = plt.subplots(figsize=(13, 11))
+fig, ax = plt.subplots(figsize=(12, 10))
 pos = nx.spring_layout(G, k=4)
 
 # Nodes scaled by lemmas freq present in bigrams
@@ -66,9 +66,11 @@ for key, value in pos.items():
         x,
         y,
         s=key,
-        bbox=dict(facecolor="#B0E0E6", alpha=0.5),
+        bbox=dict(facecolor="#FFF0F5", alpha=0.5, edgecolor = "grey", pad=3.5),
         horizontalalignment="center",
-        fontsize=8,
+    #    color = '#696969',
+        weight='bold',
+        fontsize=6,
     )
 
 fig.patch.set_visible(False)

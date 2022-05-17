@@ -7,7 +7,7 @@ import pandas as pd
 
 df = pd.read_pickle("../../data/pkl/dataset.pkl")
 
-freq = Counter(lemma for post in df["nn_adj_lemmas"] for lemma in set(post))
+freq = Counter(lemma for post in df["lemmas"] for lemma in set(post))
 df = pd.DataFrame(freq.items(), columns=["word", "frequency"]).sort_values(
     by="frequency", ascending=False
 )
