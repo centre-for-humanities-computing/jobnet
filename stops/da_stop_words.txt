@@ -15,6 +15,10 @@ mon
 der på 
 syv
 nok
+lo
+f
+ekse
+løbende
 dit
 ja
 hun
@@ -324,6 +328,7 @@ forrige
 fra
 få
 får
+samt
 før
 god
 godt

@@ -52,12 +52,6 @@ def substitute_letter(text: str) -> str:
     changed_char = re.sub("Ø", "oe", changed_char)
     changed_char = re.sub("Æ", "ae", changed_char)
     changed_char = re.sub("Å", "aa", changed_char)
-    changed_char = re.sub("ü", "ue", changed_char)
-    changed_char = re.sub("Ü", "ue", changed_char)
-    changed_char = re.sub("ä", "ae", changed_char)
-    changed_char = re.sub("Ä", "ae", changed_char)
-    changed_char = re.sub("ö", "oe", changed_char)
-    changed_char = re.sub("Ö", "oe", changed_char)
 
     return changed_char
 
@@ -89,7 +83,7 @@ def collect_tokens(text: str, nlp) -> List[str]:
 
     Args:
         text (str): A text to tokenize.
-        nlp (_type_): A spaCy pipeline.
+        nlp : A spaCy pipeline.
 
     Returns:
         List[str]: A list with tokens.

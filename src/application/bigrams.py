@@ -13,14 +13,14 @@ from collections import Counter
 
 df = pd.read_pickle("../../data/pkl/dataset.pkl")
 
-lemmas = df["lemmas"]
+lemmas = df["nn_adj_lemmas"]
 
 terms_bigram = [list(bigrams(post)) for post in lemmas]
 bigram = list(itertools.chain(*terms_bigram))
 bigram_counts = collections.Counter(bigram)
 bigrams_df = pd.DataFrame(bigram_counts.most_common(30), columns=["bigram", "count"])
 
-word_freq = Counter(lemma for post in df["lemmas"] for lemma in set(post))
+word_freq = Counter(lemma for post in df["nn_adj_lemmas"] for lemma in set(post))
 w_freq_df = pd.DataFrame(word_freq.items(), columns=["word", "frequency"]).sort_values(
     by="frequency", ascending=False
 )
@@ -75,4 +75,4 @@ for key, value in pos.items():
 
 fig.patch.set_visible(False)
 ax.axis("off")
-plt.savefig("../../figs/bigram_graph.pdf")
+plt.savefig("../../figs/bigram_nn_adj_graph.pdf")
