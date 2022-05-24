@@ -68,9 +68,7 @@ def clean_text(text: str) -> str:
     """
 
     no_urls = re.sub(r"http\S+", "", text)
-    no_special_ch = re.sub(
-        r"(#[A-Za-z]+)|(@[A-Za-z]+)|([^A-Za-z \t])|(\w+:\/\/\S+)", " ", no_urls
-    )
+    no_special_ch = re.sub(r"([^A-Za-zØøÅåÆæ])|(\w+:\/\/\S+)", " ", no_urls)
     no_special_ch = no_special_ch.replace("\n", " ")
     lowercased_str = no_special_ch.lower()
     cleaned_text = " ".join(lowercased_str.split())
