@@ -47,7 +47,6 @@ for file in files_paths:
             continue
 
 cleaned_posts = [remove_html_commands(post) for post in descriptions]
-#cleaned_posts = [substitute_letter(post) for post in cleaned_posts]
 cleaned_posts = [clean_text(post) for post in cleaned_posts]
 
 df = pd.DataFrame(
