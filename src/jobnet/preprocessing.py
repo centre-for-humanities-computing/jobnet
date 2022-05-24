@@ -35,27 +35,6 @@ def remove_html_commands(text: str) -> str:
     return text
 
 
-def substitute_letter(text: str) -> str:
-    """
-    Substitutes Danish special letters with the respective equivalents.
-
-    Args:
-        text (str): The string to change letters in.
-
-    Returns:
-        str: The input string with Danish special letters substituted.
-    """
-
-    changed_char = re.sub("ø", "oe", text)
-    changed_char = re.sub("æ", "ae", changed_char)
-    changed_char = re.sub("å", "aa", changed_char)
-    changed_char = re.sub("Ø", "oe", changed_char)
-    changed_char = re.sub("Æ", "ae", changed_char)
-    changed_char = re.sub("Å", "aa", changed_char)
-
-    return changed_char
-
-
 def clean_text(text: str) -> str:
     """
     Cleans text from punctuation, URLs, special characters, multiple spaces and lowercases.
@@ -75,7 +54,7 @@ def clean_text(text: str) -> str:
 
     return cleaned_text
 
- 
+
 def collect_tokens(text: str, nlp) -> List[str]:
     """Collects tokens from a text.
 
@@ -92,8 +71,8 @@ def collect_tokens(text: str, nlp) -> List[str]:
 
     for token in doc:
         tokens.append(token.text)
-    
-    return tokens   
+
+    return tokens
 
 
 def collect_lemmas(text: str, nlp) -> List[str]:
