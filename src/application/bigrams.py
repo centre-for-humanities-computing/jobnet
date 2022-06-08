@@ -1,4 +1,7 @@
 """Pipeline for nodes graph creation"""
+import sys
+
+sns.set()
 import pandas as pd
 from nltk.util import bigrams
 import itertools
@@ -6,21 +9,19 @@ import collections
 import networkx as nx
 import matplotlib.pyplot as plt
 import seaborn as sns
-
-sns.set()
 from collections import Counter
 
 
 df = pd.read_pickle("../../data/pkl/dataset.pkl")
 
-lemmas = df["nn_adj_lemmas"]
+lemmas = df[str(sys.argv[1])]
 
 terms_bigram = [list(bigrams(post)) for post in lemmas]
 bigram = list(itertools.chain(*terms_bigram))
 bigram_counts = collections.Counter(bigram)
 bigrams_df = pd.DataFrame(bigram_counts.most_common(30), columns=["bigram", "count"])
 
-word_freq = Counter(lemma for post in df["nn_adj_lemmas"] for lemma in set(post))
+word_freq = Counter(lemma for post in df[str(sys.argv[1])] for lemma in set(post))
 w_freq_df = pd.DataFrame(word_freq.items(), columns=["word", "frequency"]).sort_values(
     by="frequency", ascending=False
 )
@@ -66,13 +67,14 @@ for key, value in pos.items():
         x,
         y,
         s=key,
-        bbox=dict(facecolor="#FFF0F5", alpha=0.5, edgecolor = "grey", pad=3.5),
+        bbox=dict(facecolor="#FFF0F5", alpha=0.5, edgecolor="grey", pad=3.5),
         horizontalalignment="center",
-    #    color = '#696969',
-        weight='bold',
+        #    color = '#696969',
+        weight="bold",
         fontsize=6,
     )
 
 fig.patch.set_visible(False)
 ax.axis("off")
-plt.savefig("../../figs/bigram_nn_adj_graph.pdf")
+plot_name = f"../../figs/all_dataset/bigram_{str(sys.argv[1])}.pdf"
+plt.savefig(plot_name)

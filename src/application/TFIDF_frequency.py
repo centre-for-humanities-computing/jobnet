@@ -15,7 +15,7 @@ df = pd.read_pickle("../../data/pkl/dataset.pkl")
 vectorizer = TfidfVectorizer(
     lowercase=False, tokenizer=identity_tokenizer, ngram_range=(1, 1)
 )
-tfidf_vectors = vectorizer.fit_transform(df["lemmas"])
+tfidf_vectors = vectorizer.fit_transform(df[str(sys.argv[1])])
 
 tfidf_weights = [
     (word, tfidf_vectors.getcol(idx).sum())
@@ -34,4 +34,5 @@ wordcloud = WordCloud(
 plt.figure(figsize=(40, 30))
 plt.imshow(wordcloud)
 plt.axis("off")
-plt.savefig("../../figs/unigrams_TFIDF.pdf")
+plot_name = f"../../figs/all_dataset/unigrams_{str(sys.argv[1])}_TFIDF.pdf"
+plt.savefig(plot_name)

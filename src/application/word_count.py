@@ -1,4 +1,6 @@
 """Pipeline for unweighed word count"""
+import sys
+
 import matplotlib.pyplot as plt
 import seaborn as sns
 from collections import Counter
@@ -7,7 +9,7 @@ import pandas as pd
 
 df = pd.read_pickle("../../data/pkl/dataset.pkl")
 
-freq = Counter(lemma for post in df["nn_adj_lemmas"] for lemma in set(post))
+freq = Counter(lemma for post in df[str(sys.argv[1])] for lemma in set(post))
 df = pd.DataFrame(freq.items(), columns=["word", "frequency"]).sort_values(
     by="frequency", ascending=False
 )
@@ -32,4 +34,5 @@ plt.yticks(fontsize=25)
 
 ax.set(xlabel="", ylabel="")
 
-plt.savefig("../../figs/unigrams_nn_adj_count.pdf")
+plot_name = f"../../figs/all_dataset/unigrams_{str(sys.argv[1])}.pdf"
+plt.savefig(plot_name)
