@@ -8,8 +8,6 @@ import pandas as pd
 
 
 df = pd.read_pickle("../../data/pkl/dataset.pkl")
-occ_areas = list(df["occupation_area"].unique())
-
 
 freq = Counter(lemma for post in lemmas for lemma in set(post))
 df = pd.DataFrame(freq.items(), columns=["word", "frequency"]).sort_values(
