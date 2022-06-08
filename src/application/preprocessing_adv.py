@@ -7,7 +7,6 @@ import json
 import spacy
 import pandas as pd
 from preprocessing import (
-    substitute_letter,
     clean_text,
     remove_html_commands,
     collect_tokens,
@@ -93,5 +92,9 @@ no_stops_nn_adj = [rm_stops(post, da_stops) for post in nn_adj]
 df["tokens"] = no_stops_tokens
 df["lemmas"] = no_stops_lemmas
 df["nn_adj_lemmas"] = no_stops_nn_adj
+
+df["occupation_area"] = df["occupation_area"].apply(clean_text)
+df["occupation_group"] = df["occupation_group"].apply(clean_text)
+df["occupation"] = df["occupation"].apply(clean_text)
 
 df.to_pickle("../../data/pkl/dataset.pkl")
