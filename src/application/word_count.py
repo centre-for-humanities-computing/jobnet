@@ -8,31 +8,38 @@ import pandas as pd
 
 
 df = pd.read_pickle("../../data/pkl/dataset.pkl")
+occ_areas = list(df["occupation_area"].unique())
 
-freq = Counter(lemma for post in df[str(sys.argv[1])] for lemma in set(post))
-df = pd.DataFrame(freq.items(), columns=["word", "frequency"]).sort_values(
-    by="frequency", ascending=False
-)
+for area in occ_areas:
 
-plt.rc("xtick", labelsize=25)
-plt.rc("ytick", labelsize=25)
+    df0 = df[df["occupation_area"] == area]
+    lemmas = df0[str(sys.argv[1])]
+    
+    freq = Counter(lemma for post in lemmas for lemma in set(post))
+    df = pd.DataFrame(freq.items(), columns=["word", "frequency"]).sort_values(
+        by="frequency", ascending=False
+    )
 
-fig, axes = plt.subplots(figsize=(25, 15))
-fig.subplots_adjust(bottom=0.15, left=0.2)
+    plt.rc("xtick", labelsize=25)
+    plt.rc("ytick", labelsize=25)
 
-ax = sns.barplot(x="frequency", y="word", palette="Blues_r", data=df.head(30))
+    fig, axes = plt.subplots(figsize=(25, 15))
+    fig.subplots_adjust(bottom=0.15, left=0.2)
 
-ax.xaxis.get_label().set_fontsize(25)
-ax.yaxis.get_label().set_fontsize(25)
-ax.axes.set_title("Most frequent words", fontweight="bold", size=40, y=1.03)
+    ax = sns.barplot(x="frequency", y="word", palette="Blues_r", data=df.head(30))
 
-ax.tick_params(axis="x", colors="grey")
-ax.tick_params(axis="y", colors="grey")
+    ax.xaxis.get_label().set_fontsize(25)
+    ax.yaxis.get_label().set_fontsize(25)
+    ax.axes.set_title("Most frequent words", fontweight="bold", size=40, y=1.03)
 
-plt.xticks(fontsize=40)
-plt.yticks(fontsize=25)
+    ax.tick_params(axis="x", colors="grey")
+    ax.tick_params(axis="y", colors="grey")
 
-ax.set(xlabel="", ylabel="")
+    plt.xticks(fontsize=40)
+    plt.yticks(fontsize=25)
 
-plot_name = f"../../figs/all_dataset/unigrams_{str(sys.argv[1])}.pdf"
-plt.savefig(plot_name)
+    ax.set(xlabel="", ylabel="")
+
+    plot_name = f"../../figs/all_dataset/unigrams_{str(sys.argv[1])}.pdf"
+    plt.savefig(plot_name)
+    plt.close()
