@@ -8,6 +8,7 @@ import spacy
 
 nltk.download("punkt")
 from typing import List
+import pandas as pd
 
 
 def remove_html_commands(text: str) -> str:
@@ -143,3 +144,26 @@ def rm_stops(text: List[str], stopwords: List[str]) -> List[str]:
 
 def identity_tokenizer(text):
     return text
+
+
+def create_dfs_list(df: pd.DataFrame, lemmas: str, occupation_areas: List[str]) -> List[pd.Series]:
+    """Creates a list of pandas Serieses.
+
+    Args:
+        df (pd.Dataframe): The dataframe with preprocessed job posts.
+        lemmas (str): The name of a Series column with lemmatised job posts.   
+        occupation_areas (List[str]): List of occupation areas names.
+
+    Returns:
+        List[pd.Series: The list of pandas Serieses per occupation area.
+    """
+
+    dfs = []
+    
+    for area in occupation_areas:
+        df0 = df[df["occupation_area"] == area]
+        sr_lemmas = df0[lemmas]
+        sr_lemmas = sr_lemmas.rename(area)
+        dfs.append(sr_lemmas)
+    dfs.append(df[lemmas].rename("all_data"))
+    return dfs

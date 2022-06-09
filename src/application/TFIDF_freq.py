@@ -1,13 +1,13 @@
-"""Pipeline for word frequency count"""
+"""Pipeline for TF-IDF weighed word frequency count"""
 import sys
 
-sys.path.append("../jobnet")
 sys.path.append("../../data")
+sys.path.append("../jobnet")
+import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-from collections import Counter
-import pandas as pd
-from preprocessing import create_dfs_list
+from sklearn.feature_extraction.text import TfidfVectorizer
+from preprocessing import identity_tokenizer, create_dfs_list
 
 
 df = pd.read_pickle("../../data/pkl/dataset.pkl")
@@ -19,10 +19,18 @@ for df in dfs_series:
 
     name = df.name
 
-    freq = Counter(lemma for post in df for lemma in set(post))
-    df_freq = pd.DataFrame(freq.items(), columns=["word", "frequency"]).sort_values(
-        by="frequency", ascending=False
+    vectorizer = TfidfVectorizer(
+        lowercase=False, tokenizer=identity_tokenizer, ngram_range=(1, 1)
     )
+    tfidf_vectors = vectorizer.fit_transform(df)
+
+    tfidf_weights = [
+        (word, tfidf_vectors.getcol(idx).sum())
+        for word, idx in vectorizer.vocabulary_.items()
+    ]
+
+    tf_df = pd.DataFrame(tfidf_weights, columns=["word", "frequency"])
+    tf_df = tf_df.sort_values(by="frequency", ascending=False)
 
     plt.rc("xtick", labelsize=25)
     plt.rc("ytick", labelsize=25)
@@ -30,7 +38,7 @@ for df in dfs_series:
     fig, axes = plt.subplots(figsize=(25, 15))
     fig.subplots_adjust(bottom=0.15, left=0.2)
 
-    ax = sns.barplot(x="frequency", y="word", palette="Greens_r", data=df_freq.head(30))
+    ax = sns.barplot(x="frequency", y="word", palette="Blues_r", data=tf_df.head(30))
 
     ax.xaxis.get_label().set_fontsize(25)
     ax.yaxis.get_label().set_fontsize(25)
@@ -44,6 +52,6 @@ for df in dfs_series:
 
     ax.set(xlabel="", ylabel="")
 
-    plot_name = f"../../figs/word_count/{name}_unigrams_{str(sys.argv[1])}.pdf"
+    plot_name = f"../../figs/TFIDF/{name}__TFIDF_{str(sys.argv[1])}.pdf"
     plt.savefig(plot_name)
     plt.close()
