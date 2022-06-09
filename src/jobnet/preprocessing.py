@@ -146,12 +146,14 @@ def identity_tokenizer(text):
     return text
 
 
-def create_dfs_list(df: pd.DataFrame, lemmas: str, occupation_areas: List[str]) -> List[pd.Series]:
+def create_dfs_list(
+    df: pd.DataFrame, lemmas: str, occupation_areas: List[str]
+) -> List[pd.Series]:
     """Creates a list of pandas Serieses.
 
     Args:
         df (pd.Dataframe): The dataframe with preprocessed job posts.
-        lemmas (str): The name of a Series column with lemmatised job posts.   
+        lemmas (str): The name of a Series column with lemmatised job posts.
         occupation_areas (List[str]): List of occupation areas names.
 
     Returns:
@@ -159,7 +161,7 @@ def create_dfs_list(df: pd.DataFrame, lemmas: str, occupation_areas: List[str]) 
     """
 
     dfs = []
-    
+
     for area in occupation_areas:
         df0 = df[df["occupation_area"] == area]
         sr_lemmas = df0[lemmas]
