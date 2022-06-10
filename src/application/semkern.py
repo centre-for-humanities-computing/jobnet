@@ -1,11 +1,11 @@
 """Pipeline for training word2vec model on job posts and plotting semantic graphs"""
 import sys
 
-sys.path.append("../../../semantisk-kernel")
+sys.path.append("../../../semantisk-kernel/semkern")
 import pandas as pd
 from gensim.models import Word2Vec
-from semkern.model import train_model
-from semkern.graphing import plot
+from model import train_model
+from graphing import plot
 
 
 df = pd.read_pickle("../../data/pkl/dataset.pkl")
