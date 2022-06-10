@@ -1,7 +1,6 @@
 """Pipeline for collection and processing of job posts"""
 import sys
 
-sys.path.append("../../data")
 sys.path.append("../jobnet")
 import json
 import spacy

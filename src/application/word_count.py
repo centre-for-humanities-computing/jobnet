@@ -2,7 +2,6 @@
 import sys
 
 sys.path.append("../jobnet")
-sys.path.append("../../data")
 import matplotlib.pyplot as plt
 import seaborn as sns
 from collections import Counter

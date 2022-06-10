@@ -1,7 +1,6 @@
 """Pipeline for TF-IDF weighed word frequency count"""
 import sys
 
-sys.path.append("../../data")
 sys.path.append("../jobnet")
 import pandas as pd
 import matplotlib.pyplot as plt
