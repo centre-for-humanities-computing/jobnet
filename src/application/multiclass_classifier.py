@@ -1,4 +1,4 @@
-"""Pipeline for training a multiclass classifier to classify jop posts per sector"""
+"""Pipeline for training a multiclass classifier to classify job posts per sector"""
 import sys
 
 sys.path.append("../jobnet")

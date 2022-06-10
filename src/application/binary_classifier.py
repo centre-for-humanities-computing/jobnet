@@ -1,4 +1,4 @@
-"""Pipeline for training a binary Logistic Regression classifier to classify jop posts per sector (academic vs non academic)"""
+"""Pipeline for training a binary Logistic Regression classifier to classify job posts per sector (academic vs non academic)"""
 import sys
 
 sys.path.append("../jobnet")
