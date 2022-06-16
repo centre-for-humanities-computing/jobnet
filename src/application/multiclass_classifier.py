@@ -49,3 +49,25 @@ target_names = [
 ]
 report = classification_report(y_test, y_pred, target_names=target_names)
 print(report)
+
+df_features = pd.DataFrame(
+    columns=["word", "akademisk", "pædagogisk", "salg", "sundhed"]
+)
+
+features = tfidf_vectorizer.get_feature_names()
+df_features["word"] = features
+
+sectors = ["akademisk", "pædagogisk", "salg", "sundhed"]
+classes = [0, 1, 2, 3]
+
+for sector, cl in zip(sectors, classes):
+    print(sector, cl)
+    feature_w = []
+    scores = model.feature_log_prob_[cl, :]
+    for k, v in enumerate(scores):
+        feature_w.append(v)
+    print(len(feature_w))
+    df_features[sector] = feature_w
+    feature_w = []
+
+df_features.to_pickle("../../data/pkl/multiclass_feature_analysis.pkl")

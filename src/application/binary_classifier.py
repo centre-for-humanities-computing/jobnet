@@ -45,3 +45,17 @@ y_pred = model.predict(X_test)
 target_names = ["akademisk arbejde", "pædagogisk socialt og kirkeligt arbejde"]
 report = classification_report(y_test, y_pred, target_names=target_names)
 print(report)
+
+df_features = pd.DataFrame(columns=["word", "score"])
+
+features = tfidf_vectorizer.get_feature_names()
+df_features["word"] = features
+
+importance = model.coef_[0]
+scores = []
+for i, v in enumerate(importance):
+    scores.append(v)
+
+df_features["score"] = scores
+
+df_features.to_pickle("../../data/pkl/binary_feature_analysis.pkl")
