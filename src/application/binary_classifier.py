@@ -9,6 +9,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import classification_report
+from sklearn.preprocessing import StandardScaler
 
 
 df = pd.read_pickle("../../data/pkl/dataset.pkl")
@@ -36,8 +37,11 @@ tfidf_vectorizer = TfidfVectorizer(
 X_train = tfidf_vectorizer.fit_transform(x_train)
 X_test = tfidf_vectorizer.transform(x_test)
 
+scaler = StandardScaler()
 X_train = X_train.toarray()
 X_test = X_test.toarray()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.fit_transform(X_test)
 
 model.fit(X_train, y_train)
 y_pred = model.predict(X_test)
